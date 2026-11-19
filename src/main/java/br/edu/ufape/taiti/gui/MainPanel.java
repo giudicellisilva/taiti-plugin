@@ -230,10 +230,34 @@ public class MainPanel {
                 count + " scenario" + (count != 1 ? "s" : "") + " found");
     }
 
+    private int getCurrentFileTotalScenarios() {
+        if (currentCenterFile == null) return 0;
+        OpenFeatureFile openFeatureFile = repositoryOpenFeatureFile.getFeatureFile(currentCenterFile);
+        if (openFeatureFile == null) return 0;
+        return (int) openFeatureFile.getFileLines().stream()
+                .filter(l -> l.getLine() != null
+                        && (l.getLine().trim().startsWith("Scenario:")
+                        || l.getLine().trim().startsWith("Scenario Outline:")))
+                .count();
+    }
+
+    private int getCurrentFileSelectedScenarios() {
+        if (currentCenterFile == null) return 0;
+        int count = 0;
+        for (int r = 1; r < tableModel.getRowCount(); r++) {
+            TestRow row = tableModel.getRow(r);
+            if (currentCenterFile.equals(row.getFile())) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     private void refreshSummary() {
-        int count    = getSelectedScenarioCount();
+        int fileSelected = getCurrentFileSelectedScenarios();
+        int fileTotal    = getCurrentFileTotalScenarios();
         String fname = currentCenterFile != null ? currentCenterFile.getName() : null;
-        if (testSummaryPanel != null) testSummaryPanel.update(count, count, fname);
+        if (testSummaryPanel != null) testSummaryPanel.update(fileSelected, fileTotal, fname);
         if (onSelectionChanged != null) onSelectionChanged.run();
     }
 
