@@ -25,6 +25,10 @@ public class TestSummaryPanel extends JPanel {
     // Header
     private final JLabel selectedCountBadge;
 
+    // Check block
+    private JLabel checkTitle;
+    private JLabel checkSub;
+
     // Filled state
     private final JPanel filledPanel;
     private final JLabel summaryFileName;
@@ -70,18 +74,19 @@ public class TestSummaryPanel extends JPanel {
         filledPanel = new JPanel();
         filledPanel.setLayout(new BoxLayout(filledPanel, BoxLayout.Y_AXIS));
         filledPanel.setOpaque(false);
+        filledPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         filledPanel.setVisible(false);
 
         // Check icon
         JLabel checkIcon = new JLabel(makeCheckIcon(), SwingConstants.CENTER);
         checkIcon.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel checkTitle = new JLabel("All scenarios in this file have been selected.");
+        checkTitle = new JLabel("All scenarios in this file have been selected.");
         checkTitle.setFont(checkTitle.getFont().deriveFont(Font.BOLD, 12f));
         checkTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
         checkTitle.setHorizontalAlignment(SwingConstants.CENTER);
 
-        JLabel checkSub = new JLabel(
+        checkSub = new JLabel(
                 "<html><center>You can uncheck the ones that are not related to the task.</center></html>");
         checkSub.setFont(checkSub.getFont().deriveFont(11f));
         checkSub.setForeground(JBColor.GRAY);
@@ -91,6 +96,7 @@ public class TestSummaryPanel extends JPanel {
         JPanel checkBlock = new JPanel();
         checkBlock.setLayout(new BoxLayout(checkBlock, BoxLayout.Y_AXIS));
         checkBlock.setOpaque(false);
+        checkBlock.setAlignmentX(Component.LEFT_ALIGNMENT);
         checkBlock.setBorder(BorderFactory.createEmptyBorder(12, 12, 8, 12));
         checkBlock.add(checkIcon);
         checkBlock.add(Box.createVerticalStrut(8));
@@ -101,16 +107,18 @@ public class TestSummaryPanel extends JPanel {
         // Summary rows
         JLabel resumoTitle = new JLabel("Summary of selected tests");
         resumoTitle.setFont(resumoTitle.getFont().deriveFont(Font.BOLD, 12f));
+        resumoTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         summaryFileName = new JLabel("—");
         summaryTotal    = new JLabel("0");
         summarySelected = new JLabel("0");
 
         JPanel summaryRows = buildSummaryTable();
+        summaryRows.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         // Clear button
         JButton clearBtn = new JButton("\uD83D\uDDD1 Clear selection for this file");
-        clearBtn.setForeground(new Color(200, 60, 60));
+        clearBtn.setForeground(new JBColor(new Color(180, 40, 40), new Color(220, 80, 80)));
         clearBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         clearBtn.setAlignmentX(Component.LEFT_ALIGNMENT);
         clearBtn.addActionListener(e -> { if (onClearClicked != null) onClearClicked.run(); });
@@ -118,6 +126,7 @@ public class TestSummaryPanel extends JPanel {
         JPanel summaryBlock = new JPanel();
         summaryBlock.setLayout(new BoxLayout(summaryBlock, BoxLayout.Y_AXIS));
         summaryBlock.setOpaque(false);
+        summaryBlock.setAlignmentX(Component.LEFT_ALIGNMENT);
         summaryBlock.setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
         summaryBlock.add(resumoTitle);
         summaryBlock.add(Box.createVerticalStrut(10));
@@ -131,6 +140,7 @@ public class TestSummaryPanel extends JPanel {
         // ── Body scroll ──────────────────────────────────────────────────────
         JPanel body = new JPanel();
         body.setLayout(new BoxLayout(body, BoxLayout.Y_AXIS));
+        body.setAlignmentX(Component.LEFT_ALIGNMENT);
         body.add(importantBox);
         body.add(filledPanel);
 
@@ -158,12 +168,20 @@ public class TestSummaryPanel extends JPanel {
      * @param fileName      name of the currently open .feature file (may be null)
      */
     public void update(int selectedCount, int totalCount, String fileName) {
-        selectedCountBadge.setText(selectedCount + (selectedCount == 1 ? " selected" : " selecteds"));
+        selectedCountBadge.setText(selectedCount + (selectedCount == 1 ? " selected" : " selected"));
         filledPanel.setVisible(selectedCount > 0);
 
         summarySelected.setText(String.valueOf(selectedCount));
         summaryTotal.setText(String.valueOf(totalCount));
         summaryFileName.setText(fileName != null ? fileName : "—");
+
+        if (totalCount > 0 && selectedCount >= totalCount) {
+            checkTitle.setText("All scenarios in this file have been selected.");
+            checkSub.setText("<html><center>You can uncheck the ones that are not related to the task.</center></html>");
+        } else {
+            checkTitle.setText(selectedCount + " scenario" + (selectedCount == 1 ? "" : "s") + " selected in this file.");
+            checkSub.setText("<html><center>You can uncheck or select more scenarios in the table.</center></html>");
+        }
     }
 
     // ── Private builders ────────────────────────────────────────────────────
@@ -237,20 +255,20 @@ public class TestSummaryPanel extends JPanel {
         box.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(8, 12, 8, 12),
                 BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(new Color(60, 120, 60), 1, true),
+                        BorderFactory.createLineBorder(new JBColor(new Color(60, 120, 60), new Color(45, 90, 45)), 1, true),
                         BorderFactory.createEmptyBorder(10, 12, 10, 12))));
-        box.setBackground(new Color(30, 50, 30));
+        box.setBackground(new JBColor(new Color(235, 247, 235), new Color(30, 50, 30)));
         box.setOpaque(true);
 
         JLabel title = new JLabel("\u2605 Important");
         title.setFont(title.getFont().deriveFont(Font.BOLD, 12f));
-        title.setForeground(new Color(140, 200, 100));
+        title.setForeground(new JBColor(new Color(40, 120, 30), new Color(140, 200, 100)));
         title.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel text = new JLabel(
-                "<html><div style='width:200px'>The selected tests will be saved to a .csv file and attached to the Trello task.</div></html>");
+                "<html>The selected tests will be saved to a .csv file and attached to the Trello task.</html>");
         text.setFont(text.getFont().deriveFont(11f));
-        text.setForeground(new Color(180, 220, 160));
+        text.setForeground(new JBColor(new Color(35, 95, 30), new Color(180, 220, 160)));
         text.setAlignmentX(Component.LEFT_ALIGNMENT);
         text.setBorder(BorderFactory.createEmptyBorder(4, 0, 0, 0));
 

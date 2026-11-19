@@ -117,12 +117,12 @@ public class RiskDetailsPanel extends JPanel {
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         card.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(COLOR_WARNING, 1, true),
-                BorderFactory.createEmptyBorder(12, 14, 12, 14)
+                BorderFactory.createEmptyBorder(8, 10, 8, 10)
         ));
         card.setBackground(blendWithBackground(COLOR_WARNING));
 
         JLabel warningTitle = new JLabel("\u26A0 No linked tests");
-        warningTitle.setFont(warningTitle.getFont().deriveFont(Font.BOLD, 14f));
+        warningTitle.setFont(warningTitle.getFont().deriveFont(Font.BOLD, 13f));
         warningTitle.setForeground(COLOR_WARNING);
         warningTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -131,24 +131,26 @@ public class RiskDetailsPanel extends JPanel {
         ));
         warningBody.setForeground(new Color(220, 220, 220));
         warningBody.setAlignmentX(Component.LEFT_ALIGNMENT);
-        warningBody.setBorder(BorderFactory.createEmptyBorder(8, 0, 12, 0));
+        warningBody.setBorder(BorderFactory.createEmptyBorder(4, 0, 8, 0));
 
         JPanel hintBox = new JPanel();
         hintBox.setLayout(new BoxLayout(hintBox, BoxLayout.Y_AXIS));
         hintBox.setBorder(BorderFactory.createCompoundBorder(
                 createDashedBorder(COLOR_WARNING),
-                BorderFactory.createEmptyBorder(10, 12, 10, 12)
+                BorderFactory.createEmptyBorder(6, 8, 6, 8)
         ));
         hintBox.setOpaque(false);
         hintBox.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel hintTitle = new JLabel("\uD83D\uDDB1 DOUBLE-CLICK ON THE TASK");
-        hintTitle.setFont(hintTitle.getFont().deriveFont(Font.BOLD, 12f));
+        hintTitle.setFont(hintTitle.getFont().deriveFont(Font.BOLD, 11f));
         hintTitle.setForeground(COLOR_WARNING);
+        hintTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel hintSubtitle = new JLabel("to link tests");
         hintSubtitle.setForeground(new Color(220, 220, 220));
-        hintSubtitle.setBorder(BorderFactory.createEmptyBorder(2, 0, 6, 0));
+        hintSubtitle.setBorder(BorderFactory.createEmptyBorder(1, 0, 4, 0));
+        hintSubtitle.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel hintDetail = new JLabel(wrapHtml(
                 "This will open the screen for selecting .feature files and test scenarios."
@@ -156,6 +158,7 @@ public class RiskDetailsPanel extends JPanel {
         hintDetail.setForeground(new Color(190, 190, 190));
         Font detailFont = hintDetail.getFont();
         hintDetail.setFont(detailFont.deriveFont(detailFont.getSize2D() - 1f));
+        hintDetail.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         hintBox.add(hintTitle);
         hintBox.add(hintSubtitle);
