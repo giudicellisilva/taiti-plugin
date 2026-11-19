@@ -384,6 +384,10 @@ public class TaskBarGUI {
 
             if (selectedRow == -1) {
                 taskDetailsPanel.setVisible(false);
+                if (TaskBar != null) {
+                    TaskBar.revalidate();
+                    TaskBar.repaint();
+                }
                 return;
             }
 
@@ -535,6 +539,10 @@ public class TaskBarGUI {
                     unstartedTable.clearSelection();
 
                     taskDetailsPanel.setVisible(false);
+                    if (TaskBar != null) {
+                        TaskBar.revalidate();
+                        TaskBar.repaint();
+                    }
                 }
 
                 if (e.isPopupTrigger()) {
@@ -1002,6 +1010,15 @@ public class TaskBarGUI {
             if (impactedFilesPanel != null) {
                 impactedFilesPanel.showEmpty();
             }
+        }
+
+        if (taskDetailsPanel != null) {
+            taskDetailsPanel.revalidate();
+            taskDetailsPanel.repaint();
+        }
+        if (TaskBar != null) {
+            TaskBar.revalidate();
+            TaskBar.repaint();
         }
     }
 
